@@ -9,6 +9,13 @@ import { gerarRecomendacoes } from '../utils/recomendacoes.js'
 
 const router = useRouter()
 
+function explorarArea(area) {
+  router.push({
+    name: 'profissoes',
+    query: { area: area.id },
+  })
+}
+
 function recuperarRespostas() {
   try {
     const dados = sessionStorage.getItem('calm-respostas')
@@ -34,7 +41,33 @@ function recuperarRespostas() {
 
 const respostas = recuperarRespostas()
 
-const resultado = computed(() => gerarRecomendacoes(respostas))
+const resultado = computed(() => {
+  const recomendacoes = gerarRecomendacoes(respostas)
+
+  // Normaliza os grupos e limita o total a três áreas no máximo.
+  const destaquesOriginais = Array.isArray(recomendacoes.destaque)
+    ? recomendacoes.destaque
+    : []
+
+  const outrasOriginais = Array.isArray(recomendacoes.outras)
+    ? recomendacoes.outras
+    : []
+
+  const idsDestaque = new Set(
+    destaquesOriginais.map((area) => area.id),
+  )
+
+  const areasLimitadas = [
+    ...destaquesOriginais,
+    ...outrasOriginais,
+  ].slice(0, 3)
+
+  return {
+    ...recomendacoes,
+    destaque: areasLimitadas.filter((area) => idsDestaque.has(area.id)),
+    outras: areasLimitadas.filter((area) => !idsDestaque.has(area.id)),
+  }
+})
 
 function refazerQuestionario() {
   sessionStorage.removeItem('calm-respostas')
@@ -136,6 +169,14 @@ function refazerQuestionario() {
             {{ profissao }}
           </span>
         </div>
+        <button
+          type="button"
+          class="botao-explorar-area"
+          @click="explorarArea(area)"
+        >
+          Ver profissões desta área
+          <span aria-hidden="true">→</span>
+        </button>
       </div>
     </article>
   </div>
@@ -197,6 +238,14 @@ function refazerQuestionario() {
             {{ profissao }}
           </span>
         </div>
+        <button
+          type="button"
+          class="botao-explorar-area"
+          @click="explorarArea(area)"
+        >
+          Ver profissões desta área
+          <span aria-hidden="true">→</span>
+        </button>
       </div>
     </article>
   </div>
@@ -218,7 +267,11 @@ function refazerQuestionario() {
             Refazer questionário
           </button>
 
-          <RouterLink to="/" class="botao-principal">
+          <RouterLink to="/profissoes" class="botao-principal">
+            Explorar catálogo de profissões
+          </RouterLink>
+
+          <RouterLink to="/" class="botao-secundario botao-inicio">
             Voltar ao início
           </RouterLink>
         </div>
@@ -369,6 +422,7 @@ function refazerQuestionario() {
 }
 
 .detalhes {
+  flex: 1;
   min-width: 0;
 }
 
@@ -404,6 +458,35 @@ function refazerQuestionario() {
   background: #f5faff;
   color: #315c83;
   font-size: 12px;
+}
+
+.botao-explorar-area {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 16px;
+  padding: 11px 15px;
+  border: 1px solid #4389cc;
+  border-radius: 10px;
+  background: #fff;
+  color: #357bb5;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.botao-explorar-area:hover {
+  background: #4389cc;
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.botao-explorar-area:focus-visible {
+  outline: 3px solid #4389cc55;
+  outline-offset: 3px;
 }
 
 .nota {

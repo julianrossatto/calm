@@ -4,6 +4,7 @@ import HomeView from '../views/HomeView.vue'
 import QuestionnaireView from '../views/QuestionnaireView.vue'
 import ResultsView from '../views/ResultsView.vue'
 import ProfissoesView from '../views/ProfissoesView.vue'
+import ProfissaoDetalheView from '../views/ProfissaoDetalheView.vue'
 
 const routes = [
   {
@@ -26,11 +27,21 @@ const routes = [
     name: 'profissoes',
     component: ProfissoesView,
   },
+  {
+    path: '/profissoes/:id',
+    name: 'profissao-detalhe',
+    component: ProfissaoDetalheView,
+  },
 ]
 
 const router = createRouter({
   history: createWebHistory(),
   routes,
+
+  // Volta ao topo sempre que a rota mudar
+  scrollBehavior() {
+    return { top: 0, left: 0 }
+  },
 })
 
 export default router

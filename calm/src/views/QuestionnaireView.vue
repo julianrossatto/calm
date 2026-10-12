@@ -5,6 +5,10 @@ import { useRouter } from 'vue-router'
 
 import CloudBackground from '../components/CloudBackground.vue'
 import BaseCard from '../components/BaseCard.vue'
+import {
+  opcoesProjetoFinal,
+  opcaoAreaIndefinida,
+} from '../utils/recomendacoes.js'
 
 const router = useRouter()
 
@@ -68,16 +72,11 @@ const etapas = [
     ],
   },
   {
-    titulo: 'Quais áreas você gostaria de conhecer?',
-    descricao: 'Esta é uma oportunidade para explorar caminhos, mesmo que ainda não conheça todos.',
+    titulo: 'Se pudesse participar de um projeto, qual despertaria sua curiosidade?',
+    descricao: 'Escolha as propostas que você teria vontade de experimentar, mesmo que ainda não conheça essas profissões.',
     opcoes: [
-      'Tecnologia e desenvolvimento de software',
-      'Design, comunicação e produção audiovisual',
-      'Saúde, bem-estar e qualidade de vida',
-      'Educação, psicologia e ciências humanas',
-      'Administração, negócios e empreendedorismo',
-      'Engenharia, ciências e meio ambiente',
-      'Ainda não sei. Quero conhecer possibilidades variadas.',
+      ...opcoesProjetoFinal.map((opcao) => opcao.texto),
+      opcaoAreaIndefinida,
     ],
   },
 ]

@@ -1,92 +1,91 @@
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { areasProfissionais, profissoes } from '../data/profissoes.js'
+
+const route = useRoute()
+const router = useRouter()
+
+function validarArea(areaId) {
+  return areasProfissionais.some((area) => area.id === areaId)
+    ? areaId
+    : 'Todas'
+}
 
 const busca = ref('')
-const areaSelecionada = ref('Todas')
+const areaSelecionada = ref(validarArea(route.query.area))
+const quantidadeVisivel = ref(10)
 
-const areas = [
-  'Todas',
-  'Tecnologia',
-  'Criatividade',
-  'Saúde',
-  'Educação',
-  'Negócios',
-  'Engenharia',
-]
+// Exibe 10 profissões inicialmente e permite carregar mais aos poucos.
+const profissoesVisiveis = computed(() =>
+  profissoesFiltradas.value.slice(0, quantidadeVisivel.value),
+)
 
-const profissoes = [
-  {
-    nome: 'Desenvolvedor de Software',
-    area: 'Tecnologia',
-    descricao: 'Cria sistemas, sites e aplicativos para resolver problemas.',
-    habilidades: 'Lógica, programação e resolução de problemas',
-  },
-  {
-    nome: 'Analista de Segurança da Informação',
-    area: 'Tecnologia',
-    descricao: 'Ajuda a proteger sistemas, redes e dados contra ameaças.',
-    habilidades: 'Análise, atenção e segurança digital',
-  },
-  {
-    nome: 'Designer Gráfico',
-    area: 'Criatividade',
-    descricao: 'Cria identidades visuais, peças gráficas e conteúdos visuais.',
-    habilidades: 'Criatividade, comunicação e composição visual',
-  },
-  {
-    nome: 'Psicólogo',
-    area: 'Saúde',
-    descricao: 'Atua na compreensão do comportamento e dos processos mentais.',
-    habilidades: 'Escuta, empatia e análise',
-  },
-  {
-    nome: 'Professor',
-    area: 'Educação',
-    descricao: 'Compartilha conhecimentos e auxilia no processo de aprendizagem.',
-    habilidades: 'Comunicação, didática e organização',
-  },
-  {
-    nome: 'Administrador',
-    area: 'Negócios',
-    descricao: 'Ajuda a planejar, organizar e acompanhar atividades de organizações.',
-    habilidades: 'Planejamento, liderança e organização',
-  },
-  {
-    nome: 'Engenheiro Civil',
-    area: 'Engenharia',
-    descricao: 'Planeja e acompanha obras, estruturas e projetos de construção.',
-    habilidades: 'Matemática, planejamento e análise',
-  },
-  {
-    nome: 'Analista de Dados',
-    area: 'Tecnologia',
-    descricao: 'Analisa dados para identificar padrões e apoiar decisões.',
-    habilidades: 'Raciocínio lógico, estatística e análise',
-  },
-  {
-    nome: 'Publicitário',
-    area: 'Criatividade',
-    descricao: 'Desenvolve campanhas e estratégias de comunicação para marcas.',
-    habilidades: 'Criatividade, comunicação e estratégia',
-  },
-]
+// Cria os filtros com base nas áreas cadastradas em profissoes.js.
+const areas = computed(() => [
+  { id: 'Todas', nome: 'Todas' },
+  ...areasProfissionais.map((area) => ({
+    id: area.id,
+    nome: area.nome,
+  })),
+])
 
+// Filtra por área e pesquisa em nome, descrição, área e habilidades.
 const profissoesFiltradas = computed(() => {
-  const termo = busca.value.trim().toLowerCase()
+  const termo = busca.value.trim().toLocaleLowerCase('pt-BR')
 
   return profissoes.filter((profissao) => {
     const correspondeArea =
       areaSelecionada.value === 'Todas' ||
-      profissao.area === areaSelecionada.value
+      profissao.areaId === areaSelecionada.value
 
     const correspondeBusca =
-      profissao.nome.toLowerCase().includes(termo) ||
-      profissao.descricao.toLowerCase().includes(termo) ||
-      profissao.area.toLowerCase().includes(termo)
+      profissao.nome.toLocaleLowerCase('pt-BR').includes(termo) ||
+      profissao.descricao.toLocaleLowerCase('pt-BR').includes(termo) ||
+      profissao.area.toLocaleLowerCase('pt-BR').includes(termo) ||
+      profissao.habilidades.some((habilidade) =>
+        habilidade.toLocaleLowerCase('pt-BR').includes(termo),
+      )
 
     return correspondeArea && correspondeBusca
   })
 })
+
+// Mantém a área escolhida pela URL sincronizada com o filtro do catálogo.
+watch(
+  () => route.query.area,
+  (areaId) => {
+    areaSelecionada.value = validarArea(areaId)
+  },
+)
+
+// Sempre que a pesquisa ou a área mudar, reinicia a lista nos primeiros 10 resultados.
+watch([busca, areaSelecionada], () => {
+  quantidadeVisivel.value = 10
+})
+
+function selecionarArea(areaId) {
+  areaSelecionada.value = areaId
+
+  const query = { ...route.query }
+  if (areaId === 'Todas') {
+    delete query.area
+  } else {
+    query.area = areaId
+  }
+
+  router.replace({ query })
+}
+
+function verMaisOpcoes() {
+  quantidadeVisivel.value += 10
+}
+
+function limparFiltros() {
+  busca.value = ''
+  selecionarArea('Todas')
+  quantidadeVisivel.value = 10
+}
 </script>
 
 <template>
@@ -107,6 +106,7 @@ const profissoesFiltradas = computed(() => {
         <label class="campo-busca">
           <span class="sr-only">Pesquisar profissão</span>
           <span aria-hidden="true">⌕</span>
+
           <input
             v-model="busca"
             type="search"
@@ -117,29 +117,38 @@ const profissoesFiltradas = computed(() => {
         <div class="filtros" aria-label="Filtrar por área">
           <button
             v-for="area in areas"
-            :key="area"
+            :key="area.id"
             type="button"
-            :class="{ ativo: areaSelecionada === area }"
-            :aria-pressed="areaSelecionada === area"
-            @click="areaSelecionada = area"
+            :class="{ ativo: areaSelecionada === area.id }"
+            :aria-pressed="areaSelecionada === area.id"
+            @click="selecionarArea(area.id)"
           >
-            {{ area }}
+            {{ area.nome }}
           </button>
         </div>
       </div>
 
       <div class="resumo">
         <h2>Profissões para explorar</h2>
-        <span>{{ profissoesFiltradas.length }} encontradas</span>
+
+        <span>
+          Mostrando {{ profissoesVisiveis.length }} de {{ profissoesFiltradas.length }}
+          {{ profissoesFiltradas.length === 1 ? 'profissão encontrada' : 'profissões encontradas' }}
+        </span>
       </div>
 
-      <div v-if="profissoesFiltradas.length" class="grade-profissoes">
+      <div
+        v-if="profissoesFiltradas.length"
+        class="grade-profissoes"
+      >
         <article
-          v-for="profissao in profissoesFiltradas"
-          :key="profissao.nome"
+          v-for="profissao in profissoesVisiveis"
+          :key="profissao.id"
           class="card-profissao"
         >
-          <span class="area">{{ profissao.area }}</span>
+          <span class="area">
+            {{ profissao.area }}
+          </span>
 
           <h3>{{ profissao.nome }}</h3>
 
@@ -147,19 +156,41 @@ const profissoesFiltradas = computed(() => {
 
           <div class="habilidades">
             <strong>Habilidades relacionadas</strong>
-            <span>{{ profissao.habilidades }}</span>
+            <span>{{ profissao.habilidades.join(', ') }}</span>
           </div>
+
+          <RouterLink
+            class="botao-detalhes"
+            :to="{ name: 'profissao-detalhe', params: { id: profissao.id } }"
+          >
+            Conhecer profissão
+            <span aria-hidden="true">→</span>
+          </RouterLink>
         </article>
       </div>
 
-      <div v-else class="sem-resultados">
-        <h3>Nenhuma profissão encontrada</h3>
-        <p>Tente outro termo ou selecione uma área diferente.</p>
-
+      <div
+        v-if="profissoesVisiveis.length < profissoesFiltradas.length"
+        class="acoes-catalogo"
+      >
         <button
           type="button"
-          @click="busca = ''; areaSelecionada = 'Todas'"
+          class="botao-ver-mais"
+          @click="verMaisOpcoes"
         >
+          Ver mais opções
+          <span aria-hidden="true">↓</span>
+        </button>
+      </div>
+
+      <div v-else-if="!profissoesFiltradas.length" class="sem-resultados">
+        <h3>Nenhuma profissão encontrada</h3>
+
+        <p>
+          Tente outro termo ou selecione uma área diferente.
+        </p>
+
+        <button type="button" @click="limparFiltros">
           Limpar filtros
         </button>
       </div>
@@ -360,6 +391,115 @@ const profissoesFiltradas = computed(() => {
 
 .habilidades strong {
   color: #315c83;
+}
+
+.botao-detalhes {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  margin-top: 20px;
+  padding: 11px 14px;
+  border: 1px solid #cfe2f3;
+  border-radius: 11px;
+  background: #f3f8fd;
+  color: #357bb5;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background 0.2s, border-color 0.2s, transform 0.2s;
+}
+
+.botao-detalhes:hover {
+  border-color: #4389cc;
+  background: #e8f3fd;
+  transform: translateY(-1px);
+}
+
+.botao-detalhes:focus-visible {
+  outline: 3px solid #4389cc55;
+  outline-offset: 3px;
+}
+
+.acoes-catalogo {
+  display: flex;
+  justify-content: center;
+  margin-top: 34px;
+  padding-top: 24px;
+  border-top: 1px solid #edf2f7;
+}
+
+.botao-ver-mais {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  min-width: 210px;
+  padding: 13px 22px 13px 24px;
+  border: 1px solid #4389cc;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #4389cc 0%, #357bb5 100%);
+  color: #fff;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.1px;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(49, 92, 131, 0.16);
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.botao-ver-mais > span {
+  display: grid;
+  flex: 0 0 27px;
+  width: 27px;
+  height: 27px;
+  place-items: center;
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
+  font-size: 16px;
+  line-height: 1;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.botao-ver-mais:hover {
+  border-color: #315c83;
+  background: linear-gradient(135deg, #357bb5 0%, #315c83 100%);
+  box-shadow: 0 9px 22px rgba(49, 92, 131, 0.22);
+  transform: translateY(-2px);
+}
+
+.botao-ver-mais:hover > span {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateY(2px);
+}
+
+.botao-ver-mais:active {
+  box-shadow: 0 3px 8px rgba(49, 92, 131, 0.16);
+  transform: translateY(0);
+}
+
+.botao-ver-mais:focus-visible {
+  outline: 3px solid #4389cc55;
+  outline-offset: 4px;
+}
+
+@media (max-width: 480px) {
+  .acoes-catalogo {
+    margin-top: 26px;
+    padding-top: 20px;
+  }
+
+  .botao-ver-mais {
+    width: 100%;
+    max-width: 320px;
+  }
 }
 
 .sem-resultados {
