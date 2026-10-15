@@ -1,6 +1,6 @@
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
 
 import CloudBackground from '../components/CloudBackground.vue'
@@ -12,15 +12,6 @@ import {
 
 const router = useRouter()
 
-const etapaAtual = ref(0)
-
-const respostas = ref([
-  [],
-  [],
-  [],
-  [],
-  [],
-])
 
 const etapas = [
   {
@@ -81,6 +72,60 @@ const etapas = [
   },
 ]
 
+const CHAVE_PROGRESSO = 'calm-questionario-progresso'
+
+function criarRespostasVazias() {
+  return etapas.map(() => [])
+}
+
+function recuperarProgresso() {
+  try {
+    const salvo = localStorage.getItem(CHAVE_PROGRESSO)
+    if (!salvo) return null
+
+    const dados = JSON.parse(salvo)
+    const estruturaValida =
+      Number.isInteger(dados.etapaAtual) &&
+      dados.etapaAtual >= 0 &&
+      dados.etapaAtual < etapas.length &&
+      Array.isArray(dados.respostas) &&
+      dados.respostas.length === etapas.length &&
+      dados.respostas.every(
+        (respostasEtapa, indice) =>
+          Array.isArray(respostasEtapa) &&
+          respostasEtapa.every((resposta) => etapas[indice].opcoes.includes(resposta)),
+      )
+
+    if (!estruturaValida) return null
+
+    return {
+      etapaAtual: dados.etapaAtual,
+      respostas: dados.respostas.map((respostasEtapa) => [...respostasEtapa]),
+    }
+  } catch {
+    return null
+  }
+}
+
+const progressoSalvo = recuperarProgresso()
+const etapaAtual = ref(progressoSalvo?.etapaAtual ?? 0)
+const respostas = ref(progressoSalvo?.respostas ?? criarRespostasVazias())
+
+function salvarProgresso() {
+  try {
+    localStorage.setItem(
+      CHAVE_PROGRESSO,
+      JSON.stringify({
+        etapaAtual: etapaAtual.value,
+        respostas: respostas.value,
+      }),
+    )
+  } catch {
+    // O questionário continua funcionando se o navegador bloquear o armazenamento.
+  }
+}
+
+watch([etapaAtual, respostas], salvarProgresso, { deep: true })
 const etapa = computed(() => etapas[etapaAtual.value])
 
 const progresso = computed(
@@ -131,6 +176,7 @@ function continuar() {
     JSON.stringify(respostas.value)
   )
 
+  localStorage.removeItem(CHAVE_PROGRESSO)
   router.push('/resultados')
 }
 </script>
@@ -148,6 +194,10 @@ function continuar() {
         <p>
           Não existe resposta certa ou errada.
           Descubra o que combina com você, no seu tempo.
+        </p>
+
+        <p class="mensagem-salvamento">
+          Seu progresso é salvo automaticamente neste navegador.
         </p>
       </header>
 
@@ -254,7 +304,7 @@ function continuar() {
 }
 
 .etiqueta {
-  color: #357bb5;
+  color: var(--color-brand-hover);
   font-size: 11px;
   font-weight: 800;
   letter-spacing: 1.5px;
@@ -262,21 +312,27 @@ function continuar() {
 
 .cabecalho-pagina h1 {
   margin: 14px 0;
-  color: #315c83;
+  color: var(--color-brand-dark);
   font-size: clamp(28px, 4vw, 42px);
   line-height: 1.2;
 }
 
 .cabecalho-pagina p {
-  color: #526777;
+  color: var(--color-text);
   line-height: 1.7;
 }
 
+.mensagem-salvamento {
+  margin: 12px 0 0;
+  color: var(--color-text-subtle);
+  font-size: 13px;
+  text-align: center;
+}
 .informacoes-progresso {
   display: flex;
   justify-content: space-between;
   gap: 12px;
-  color: #526777;
+  color: var(--color-text);
   font-size: 13px;
 }
 
@@ -285,32 +341,32 @@ function continuar() {
   margin: 12px 0 30px;
   overflow: hidden;
   border-radius: 20px;
-  background: #dcecf7;
+  background: var(--color-sky-100);
 }
 
 .barra-preenchida {
   height: 100%;
   border-radius: inherit;
-  background: #4389cc;
+  background: var(--color-brand);
   transition: width 0.3s ease;
 }
 
 .pergunta h2 {
   margin: 0 0 10px;
-  color: #315c83;
+  color: var(--color-brand-dark);
   font-size: 23px;
   line-height: 1.45;
 }
 
 .pergunta p {
-  color: #526777;
+  color: var(--color-text);
   line-height: 1.6;
 }
 
 .instrucao {
   display: inline-block;
   margin-top: 4px;
-  color: #4389cc;
+  color: var(--color-brand);
   font-size: 13px;
   font-weight: 700;
 }
@@ -327,10 +383,10 @@ function continuar() {
   gap: 13px;
   width: 100%;
   padding: 15px;
-  border: 1px solid #d4e5f3;
+  border: 1px solid var(--color-border-blue);
   border-radius: 12px;
-  background: #fff;
-  color: #526777;
+  background: var(--color-surface);
+  color: var(--color-text);
   text-align: left;
   line-height: 1.5;
   cursor: pointer;
@@ -338,14 +394,14 @@ function continuar() {
 }
 
 .opcao:hover {
-  border-color: #79b9eb;
-  background: #f5faff;
+  border-color: var(--color-brand-soft);
+  background: var(--color-canvas);
 }
 
 .opcao.selecionada {
-  border-color: #4389cc;
-  background: #eaf5ff;
-  color: #315c83;
+  border-color: var(--color-brand);
+  background: var(--color-sky-50);
+  color: var(--color-brand-dark);
 }
 
 .marcador {
@@ -354,21 +410,21 @@ function continuar() {
   width: 22px;
   height: 22px;
   place-items: center;
-  border: 1.5px solid #a9c7df;
+  border: 1.5px solid var(--color-sky-450);
   border-radius: 6px;
-  color: #fff;
+  color: var(--color-surface);
   font-size: 14px;
   font-weight: 800;
 }
 
 .selecionada .marcador {
-  border-color: #4389cc;
-  background: #4389cc;
+  border-color: var(--color-brand);
+  background: var(--color-brand);
 }
 
 .aviso {
   margin-top: 18px;
-  color: #526777;
+  color: var(--color-text);
   font-size: 13px;
   line-height: 1.5;
   overflow: hidden;
@@ -408,9 +464,9 @@ function continuar() {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 13px 20px;
+  padding: var(--button-padding-y) var(--button-padding-x);
   border: 0;
-  border-radius: 10px;
+  border-radius: var(--button-radius);
   font-weight: 700;
   text-decoration: none;
   cursor: pointer;
@@ -418,32 +474,32 @@ function continuar() {
 }
 
 .botao-principal {
-  background: #4389cc;
-  color: #fff;
+  background: var(--color-brand);
+  color: var(--color-surface);
 }
 
 .botao-principal:hover:not(:disabled) {
-  background: #315c83;
+  background: var(--color-brand-dark);
 }
 
 .botao-principal:disabled {
-  background: #a8c8e3;
+  background: var(--color-sky-400);
   cursor: not-allowed;
 }
 
 .botao-secundario {
-  border: 1px solid #d4e5f3;
-  background: #fff;
-  color: #315c83;
+  border: 1px solid var(--color-border-blue);
+  background: var(--color-surface);
+  color: var(--color-brand-dark);
 }
 
 .botao-secundario:hover {
-  background: #eaf5ff;
+  background: var(--color-sky-50);
 }
 
 .mensagem-final {
   margin: 24px 12px 0;
-  color: #526777;
+  color: var(--color-text);
   font-size: 13px;
   line-height: 1.7;
   text-align: center;
@@ -468,7 +524,7 @@ function continuar() {
 
   .botao-principal,
   .botao-secundario {
-    padding: 12px;
+    padding: var(--button-padding-y) var(--button-padding-x);
     font-size: 13px;
   }
 }

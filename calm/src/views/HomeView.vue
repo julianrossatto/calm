@@ -34,7 +34,7 @@ import CloudBackground from '../components/CloudBackground.vue'
       
     </section>
     
-<section class="sobre-inicio">
+<section id="sobre" class="sobre-inicio">
   <span class="etiqueta-sobre">UM ESPAÇO PARA VOCÊ</span>
 
   <h2>Seu futuro não precisa estar decidido.</h2>
@@ -63,7 +63,7 @@ import CloudBackground from '../components/CloudBackground.vue'
   flex-direction: column;
   align-items: stretch;
   overflow: hidden;
-  background: #dcecf7;
+  background: var(--color-home-background);
 }
 
 .acoes-inicio {
@@ -82,18 +82,18 @@ import CloudBackground from '../components/CloudBackground.vue'
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 14px 22px;
-  border: 1px solid #4389cc;
-  border-radius: 12px;
-  background: #ffffffd9;
-  color: #357bb5;
+  padding: var(--button-padding-y) var(--button-padding-x);
+  border: 1px solid var(--color-brand);
+  border-radius: var(--button-radius);
+  background: var(--color-surface-glass);
+  color: var(--color-brand-hover);
   font-weight: 700;
   text-decoration: none;
   transition: background 0.2s, transform 0.2s;
 }
 
 .botao-secundario:hover {
-  background: #ffffff;
+  background: var(--color-surface);
   transform: translateY(-2px);
 }
 
@@ -114,8 +114,8 @@ import CloudBackground from '../components/CloudBackground.vue'
   display: inline-block;
   padding: 8px 14px;
   border-radius: 30px;
-  background: #ffffffd9;
-  color: #526777;
+  background: var(--color-surface-glass);
+  color: var(--color-text);
   font-size: 11px;
   font-weight: 800;
   letter-spacing: 1px;
@@ -124,7 +124,7 @@ import CloudBackground from '../components/CloudBackground.vue'
 h1 {
   max-width: 680px;
   margin: 24px 0 18px;
-  color: #315c83;
+  color: var(--color-brand-dark);
   font-size: clamp(38px, 6vw, 64px);
   line-height: 1.1;
   letter-spacing: -2px;
@@ -132,12 +132,12 @@ h1 {
 
 h1 span {
   display: block;
-  color: #4389cc;
+  color: var(--color-brand);
 }
 
 .conteudo p {
   max-width: 500px;
-  color: #526777;
+  color: var(--color-text);
   font-size: 17px;
   line-height: 1.8;
 }
@@ -147,17 +147,17 @@ h1 span {
   align-items: center;
   gap: 16px;
   margin-top: 18px;
-  padding: 15px 22px;
-  border-radius: 12px;
-  background: #4389cc;
-  color: #ffffff;
+  padding: var(--button-padding-y) var(--button-padding-x);
+  border-radius: var(--button-radius);
+  background: var(--color-brand);
+  color: var(--color-surface);
   font-weight: 700;
   text-decoration: none;
   transition: background 0.2s, transform 0.2s;
 }
 
 .botao:hover {
-  background: #315c83;
+  background: var(--color-brand-dark);
   transform: translateY(-2px);
 }
 
@@ -170,16 +170,16 @@ h1 span {
   max-width: 900px;
   margin: 0 auto 64px;
   padding: 42px 32px;
-  border: 1px solid #ffffff;
+  border: 1px solid var(--color-card-border);
   border-radius: 24px;
-  background: rgba(248, 251, 255, 0.94);
-  box-shadow: 0 12px 35px rgba(49, 92, 131, 0.10);
+  background: var(--color-card-background);
+  box-shadow: var(--shadow-card);
   text-align: center;
 }
 
 
 .etiqueta-sobre {
-  color: #4389cc;
+  color: var(--color-brand);
   font-size: 11px;
   font-weight: 800;
   letter-spacing: 1.5px;
@@ -187,14 +187,14 @@ h1 span {
 
 .sobre-inicio h2 {
   margin: 16px auto;
-  color: #315c83;
+  color: var(--color-brand-dark);
   font-size: clamp(25px, 4vw, 36px);
 }
 
 .sobre-inicio p {
   max-width: 620px;
   margin: 0 auto;
-  color: #526777;
+  color: var(--color-text);
   font-size: 16px;
   line-height: 1.8;
 }
@@ -203,13 +203,13 @@ h1 span {
   display: inline-flex;
   gap: 10px;
   margin-top: 22px;
-  color: #357bb5;
+  color: var(--color-brand-hover);
   font-weight: 700;
   text-decoration: none;
 }
 
 .link-explorar:hover {
-  color: #315c83;
+  color: var(--color-brand-dark);
 }
 
 

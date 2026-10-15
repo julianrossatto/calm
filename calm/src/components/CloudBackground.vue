@@ -17,18 +17,7 @@
   z-index: -1;
   pointer-events: none;
 
-  background:
-    radial-gradient(
-      ellipse at 75% 15%,
-      #ffffff 0%,
-      transparent 35%
-    ),
-    linear-gradient(
-      180deg,
-      #dcecf7 0%,
-      #a9d6f5 55%,
-      #6fa8dc 100%
-    );
+  background: var(--background-sky);
 }
 
 
@@ -37,9 +26,9 @@
   width: 180px;
   height: 65px;
   border-radius: 60px;
-  background: #ffffff;
+  background: var(--color-surface);
   opacity: 0.9;
-  filter: drop-shadow(0 4px 8px #52677715);
+  filter: drop-shadow(0 4px 8px var(--color-cloud-shadow));
 }
 
 .nuvem::before,
@@ -48,7 +37,7 @@
   position: absolute;
   bottom: 15px;
   border-radius: 50%;
-  background: #ffffff;
+  background: var(--color-surface);
 }
 
 .nuvem::before {

@@ -1,6 +1,5 @@
-
 <script setup>
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 import CloudBackground from '../components/CloudBackground.vue'
@@ -8,6 +7,7 @@ import BaseCard from '../components/BaseCard.vue'
 import { gerarRecomendacoes } from '../utils/recomendacoes.js'
 
 const router = useRouter()
+const explicacaoAberta = ref(false)
 
 function explorarArea(area) {
   router.push({
@@ -69,6 +69,59 @@ const resultado = computed(() => {
   }
 })
 
+// ===== Animação do accordion (altura medida em JS) =====
+const DURACAO = 320
+const TRANSICAO = `height ${DURACAO}ms ease, margin-top ${DURACAO}ms ease, opacity 240ms ease`
+
+function reduzMovimento() {
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches
+}
+
+function limparEstilos(el) {
+  el.style.transition = ''
+  el.style.height = ''
+  el.style.marginTop = ''
+  el.style.opacity = ''
+}
+
+function aoEntrar(el, done) {
+  if (reduzMovimento()) return done()
+
+  // Mede a altura real do conteúdo com a altura livre (auto)
+  el.style.transition = 'none'
+  el.style.height = 'auto'
+  el.style.marginTop = '10px'
+  const alturaFinal = el.getBoundingClientRect().height
+
+  // Volta ao estado inicial da animação
+  el.style.height = '0px'
+  el.style.marginTop = '0px'
+  el.style.opacity = '0'
+  void el.offsetHeight // força o navegador a registrar o estado inicial
+
+  el.style.transition = TRANSICAO
+  el.style.height = `${alturaFinal}px`
+  el.style.marginTop = '10px'
+  el.style.opacity = '1'
+
+  setTimeout(done, DURACAO)
+}
+
+function aoSair(el, done) {
+  if (reduzMovimento()) return done()
+
+  el.style.transition = 'none'
+  el.style.height = `${el.offsetHeight}px`
+  void el.offsetHeight
+
+  el.style.transition = TRANSICAO
+  el.style.height = '0px'
+  el.style.marginTop = '0px'
+  el.style.opacity = '0'
+
+  setTimeout(done, DURACAO)
+}
+
 function refazerQuestionario() {
   sessionStorage.removeItem('calm-respostas')
   router.push('/questionario')
@@ -104,7 +157,6 @@ function refazerQuestionario() {
             </h2>
 
             <p>{{ resultado.mensagem }}</p>
-
           </div>
         </div>
 
@@ -114,143 +166,194 @@ function refazerQuestionario() {
           não definem seu futuro nem substituem orientação profissional.
         </div>
 
-
-<section
-  v-if="resultado.destaque.length"
-  class="grupo-areas"
->
-  <h3 class="titulo-grupo">Áreas que se destacaram</h3>
-
-  <p class="descricao-grupo">
-    Estas áreas tiveram a maior pontuação nas suas respostas.
-    Explore todas elas no seu tempo.
-  </p>
-
-  <div class="lista-areas">
-    <article
-      v-for="area in resultado.destaque"
-      :key="area.id"
-      class="area"
-    >
-      <div class="detalhes">
-        <h3>{{ area.nome }}</h3>
-
-        <div class="pontuacao">
-          <span>Pontuação nas respostas</span>
-          <strong>{{ area.percentual }}%</strong>
-        </div>
-
-        <div class="barra-fundo">
-          <div
-            class="barra-preenchida"
-            :style="{ width: `${area.percentual}%` }"
-          ></div>
-        </div>
-
-        <p>{{ area.descricao }}</p>
-
-        <div v-if="area.motivos.length" class="motivos">
-          <strong>O que contribuiu para esta sugestão?</strong>
-          <ul>
-            <li v-for="motivo in area.motivos" :key="motivo">
-              {{ motivo }}
-            </li>
-          </ul>
-        </div>
-
-        <h4>Você pode conhecer:</h4>
-
-        <div class="etiquetas-profissoes">
-          <span
-            v-for="profissao in area.exemplos"
-            :key="profissao"
-            class="etiqueta-profissao"
-          >
-            {{ profissao }}
-          </span>
-        </div>
-        <button
-          type="button"
-          class="botao-explorar-area"
-          @click="explorarArea(area)"
+        <section
+          v-if="resultado.destaque.length"
+          class="grupo-areas"
         >
-          Ver profissões desta área
-          <span aria-hidden="true">→</span>
-        </button>
-      </div>
-    </article>
-  </div>
-</section>
+          <h3 class="titulo-grupo">Áreas que se destacaram</h3>
 
-<!-- Outras possibilidades -->
-<section
-  v-if="resultado.outras.length"
-  class="grupo-areas outras-possibilidades"
->
-  <h3 class="titulo-grupo">Outras possibilidades</h3>
+          <p class="descricao-grupo">
+            Estas áreas tiveram a maior pontuação nas suas respostas.
+            Explore todas elas no seu tempo.
+          </p>
 
-  <p class="descricao-grupo">
-    Estas áreas também podem despertar seu interesse.
-    Vale a pena conhecê-las, mesmo que tenham recebido
-    uma pontuação menor.
-  </p>
+          <div class="lista-areas">
+            <article
+              v-for="area in resultado.destaque"
+              :key="area.id"
+              class="area"
+            >
+              <div class="detalhes">
+                <h3>{{ area.nome }}</h3>
 
-  <div class="lista-areas">
-    <article
-      v-for="area in resultado.outras"
-      :key="area.id"
-      class="area"
-    >
-      <div class="detalhes">
-        <h3>{{ area.nome }}</h3>
+                <div class="pontuacao">
+                  <span>Correspondência entre etapas</span>
+                  <strong>{{ area.percentual }}%</strong>
+                </div>
 
-        <div class="pontuacao">
-          <span>Pontuação nas respostas</span>
-          <strong>{{ area.percentual }}%</strong>
-        </div>
+                <div class="barra-fundo">
+                  <div
+                    class="barra-preenchida"
+                    :style="{ width: `${area.percentual}%` }"
+                  ></div>
+                </div>
 
-        <div class="barra-fundo">
-          <div
-            class="barra-preenchida"
-            :style="{ width: `${area.percentual}%` }"
-          ></div>
-        </div>
+                <p>{{ area.descricao }}</p>
 
-        <p>{{ area.descricao }}</p>
+                <div v-if="area.motivos.length" class="motivos">
+                  <strong>O que contribuiu para esta sugestão?</strong>
+                  <ul>
+                    <li v-for="motivo in area.motivos" :key="motivo">
+                      {{ motivo }}
+                    </li>
+                  </ul>
+                </div>
 
-        <div v-if="area.motivos.length" class="motivos">
-          <strong>O que contribuiu para esta sugestão?</strong>
-          <ul>
-            <li v-for="motivo in area.motivos" :key="motivo">
-              {{ motivo }}
-            </li>
-          </ul>
-        </div>
+                <h4>Você pode conhecer:</h4>
 
-        <h4>Você pode conhecer:</h4>
+                <div class="etiquetas-profissoes">
+                  <span
+                    v-for="profissao in area.exemplos"
+                    :key="profissao"
+                    class="etiqueta-profissao"
+                  >
+                    {{ profissao }}
+                  </span>
+                </div>
 
-        <div class="etiquetas-profissoes">
-          <span
-            v-for="profissao in area.exemplos"
-            :key="profissao"
-            class="etiqueta-profissao"
-          >
-            {{ profissao }}
-          </span>
-        </div>
-        <button
-          type="button"
-          class="botao-explorar-area"
-          @click="explorarArea(area)"
+                <button
+                  type="button"
+                  class="botao-explorar-area"
+                  @click="explorarArea(area)"
+                >
+                  Ver profissões desta área
+                  <span aria-hidden="true">→</span>
+                </button>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <!-- Outras possibilidades -->
+        <section
+          v-if="resultado.outras.length"
+          class="grupo-areas outras-possibilidades"
         >
-          Ver profissões desta área
-          <span aria-hidden="true">→</span>
-        </button>
-      </div>
-    </article>
-  </div>
-</section>
+          <h3 class="titulo-grupo">Outras possibilidades</h3>
 
+          <p class="descricao-grupo">
+            Estas áreas também podem despertar seu interesse.
+            Vale a pena conhecê-las, mesmo que tenham recebido
+            uma pontuação menor.
+          </p>
+
+          <div class="lista-areas">
+            <article
+              v-for="area in resultado.outras"
+              :key="area.id"
+              class="area"
+            >
+              <div class="detalhes">
+                <h3>{{ area.nome }}</h3>
+
+                <div class="pontuacao">
+                  <span>Correspondência entre etapas</span>
+                  <strong>{{ area.percentual }}%</strong>
+                </div>
+
+                <div class="barra-fundo">
+                  <div
+                    class="barra-preenchida"
+                    :style="{ width: `${area.percentual}%` }"
+                  ></div>
+                </div>
+
+                <p>{{ area.descricao }}</p>
+
+                <div v-if="area.motivos.length" class="motivos">
+                  <strong>O que contribuiu para esta sugestão?</strong>
+                  <ul>
+                    <li v-for="motivo in area.motivos" :key="motivo">
+                      {{ motivo }}
+                    </li>
+                  </ul>
+                </div>
+
+                <h4>Você pode conhecer:</h4>
+
+                <div class="etiquetas-profissoes">
+                  <span
+                    v-for="profissao in area.exemplos"
+                    :key="profissao"
+                    class="etiqueta-profissao"
+                  >
+                    {{ profissao }}
+                  </span>
+                </div>
+
+                <button
+                  type="button"
+                  class="botao-explorar-area"
+                  @click="explorarArea(area)"
+                >
+                  Ver profissões desta área
+                  <span aria-hidden="true">→</span>
+                </button>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="explicacao-recomendacoes" aria-labelledby="titulo-explicacao">
+          <button
+            id="titulo-explicacao"
+            class="controle-explicacao"
+            type="button"
+            :aria-expanded="explicacaoAberta"
+            aria-controls="conteudo-explicacao"
+            @click="explicacaoAberta = !explicacaoAberta"
+          >
+            <span>Como as respostas viram sugestões?</span>
+            <span
+              class="seta-explicacao"
+              :class="{ 'seta-aberta': explicacaoAberta }"
+              aria-hidden="true"
+            ></span>
+          </button>
+
+          <Transition
+            :css="false"
+            @enter="aoEntrar"
+            @after-enter="limparEstilos"
+            @leave="aoSair"
+          >
+            <div
+              v-if="explicacaoAberta"
+              id="conteudo-explicacao"
+              class="explicacao-conteudo"
+              role="region"
+              aria-labelledby="titulo-explicacao"
+            >
+              <div class="texto-explicacao">
+                <p>
+                  Cada resposta selecionada é associada a uma ou mais áreas. Em cada etapa,
+                  uma área pode receber no máximo um ponto, mesmo que você marque várias
+                  respostas relacionadas a ela.
+                </p>
+                <p>
+                  A porcentagem compara as etapas em que suas respostas combinaram com a
+                  área com as etapas que tinham opções capazes de apontar para ela. Ela
+                  não representa chance de sucesso, aptidão ou uma decisão sobre seu futuro.
+                </p>
+                <p>
+                  As afinidades são regras editoriais do projeto. O retorno de estudantes
+                  pode orientar futuras revisões dessas relações e das descrições. Esta
+                  versão não coleta nem envia esse retorno.
+                </p>
+              </div>
+            </div>
+          </Transition>
+        </section>
 
         <p class="nota">
           Não se identificou com alguma sugestão? Tudo bem!
@@ -290,7 +393,6 @@ function refazerQuestionario() {
   box-sizing: border-box;
 }
 
-
 .grupo-areas {
   margin-top: 24px;
 }
@@ -301,13 +403,13 @@ function refazerQuestionario() {
 
 .titulo-grupo {
   margin: 0 0 8px;
-  color: #315c83;
+  color: var(--color-brand-dark);
   font-size: 20px;
 }
 
 .descricao-grupo {
   margin: 0 0 18px;
-  color: #526777;
+  color: var(--color-text);
   font-size: 14px;
   line-height: 1.7;
 }
@@ -326,7 +428,7 @@ function refazerQuestionario() {
 }
 
 .etiqueta {
-  color: #357bb5;
+  color: var(--color-brand-hover);
   font-size: 11px;
   font-weight: 800;
   letter-spacing: 1.5px;
@@ -334,7 +436,7 @@ function refazerQuestionario() {
 
 .introducao h1 {
   margin: 14px 0;
-  color: #315c83;
+  color: var(--color-brand-dark);
   font-size: clamp(28px, 4vw, 42px);
   line-height: 1.2;
 }
@@ -342,7 +444,7 @@ function refazerQuestionario() {
 .introducao p {
   max-width: 620px;
   margin: 0 auto;
-  color: #526777;
+  color: var(--color-text);
   line-height: 1.7;
 }
 
@@ -359,20 +461,20 @@ function refazerQuestionario() {
   height: 44px;
   place-items: center;
   border-radius: 14px;
-  background: #dcecf7;
-  color: #315c83;
+  background: var(--color-sky-100);
+  color: var(--color-brand-dark);
   font-size: 25px;
 }
 
 .titulo-cartao h2 {
   margin: 0 0 8px;
-  color: #315c83;
+  color: var(--color-brand-dark);
   font-size: 23px;
 }
 
 .titulo-cartao p {
   margin: 0;
-  color: #526777;
+  color: var(--color-text);
   line-height: 1.6;
   font-size: 14px;
 }
@@ -381,16 +483,87 @@ function refazerQuestionario() {
   margin-top: 24px;
   padding: 14px 16px;
   border-radius: 12px;
-  background: #eaf5ff;
-  color: #526777;
+  background: var(--color-sky-50);
+  color: var(--color-text);
   font-size: 13px;
   line-height: 1.7;
 }
 
 .aviso strong {
-  color: #315c83;
+  color: var(--color-brand-dark);
 }
 
+/* ===== Accordion "Como as respostas viram sugestões?" ===== */
+.explicacao-recomendacoes {
+  margin-top: 28px;
+  padding: 15px 16px;
+  border: 1px solid var(--color-border-blue);
+  border-radius: var(--button-radius);
+  background: var(--color-surface-soft);
+  color: var(--color-text);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.controle-explicacao {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--color-brand-dark);
+  font: inherit;
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+}
+
+.controle-explicacao:focus-visible {
+  border-radius: 4px;
+  outline: 3px solid var(--color-focus-ring);
+  outline-offset: 4px;
+}
+
+.seta-explicacao {
+  flex: 0 0 9px;
+  width: 9px;
+  height: 9px;
+  margin-top: -4px;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(45deg);
+  transition: transform 0.28s ease;
+}
+
+.seta-aberta {
+  transform: rotate(225deg);
+}
+
+/* A animação de altura/opacidade é feita em JS (aoEntrar / aoSair) */
+.explicacao-conteudo {
+  display: block;
+  margin-top: 10px;
+  overflow: hidden;
+}
+
+.texto-explicacao p {
+  margin: 10px 0 0;
+}
+
+.texto-explicacao p:first-child {
+  margin-top: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .seta-explicacao {
+    transition-duration: 0.01ms;
+  }
+}
+
+/* ===== Lista de áreas ===== */
 .lista-areas {
   display: grid;
   gap: 16px;
@@ -402,9 +575,9 @@ function refazerQuestionario() {
   align-items: flex-start;
   gap: 16px;
   padding: 20px;
-  border: 1px solid #dcecf7;
+  border: 1px solid var(--color-sky-100);
   border-radius: 16px;
-  background: #fff;
+  background: var(--color-surface);
   box-sizing: border-box;
   min-width: 0;
 }
@@ -416,8 +589,8 @@ function refazerQuestionario() {
   height: 38px;
   place-items: center;
   border-radius: 12px;
-  background: #4389cc;
-  color: #fff;
+  background: var(--color-brand);
+  color: var(--color-surface);
   font-weight: 800;
 }
 
@@ -428,20 +601,20 @@ function refazerQuestionario() {
 
 .detalhes h3 {
   margin: 3px 0 8px;
-  color: #315c83;
+  color: var(--color-brand-dark);
   font-size: 18px;
 }
 
 .detalhes p {
   margin: 0;
-  color: #526777;
+  color: var(--color-text);
   font-size: 14px;
   line-height: 1.7;
 }
 
 .detalhes h4 {
   margin: 16px 0 10px;
-  color: #315c83;
+  color: var(--color-brand-dark);
   font-size: 13px;
 }
 
@@ -453,10 +626,10 @@ function refazerQuestionario() {
 
 .etiqueta-profissao {
   padding: 7px 10px;
-  border: 1px solid #d4e5f3;
+  border: 1px solid var(--color-border-blue);
   border-radius: 20px;
-  background: #f5faff;
-  color: #315c83;
+  background: var(--color-canvas);
+  color: var(--color-brand-dark);
   font-size: 12px;
 }
 
@@ -467,10 +640,10 @@ function refazerQuestionario() {
   gap: 8px;
   margin-top: 16px;
   padding: 11px 15px;
-  border: 1px solid #4389cc;
-  border-radius: 10px;
-  background: #fff;
-  color: #357bb5;
+  border: 1px solid var(--color-brand);
+  border-radius: var(--button-radius);
+  background: var(--color-surface);
+  color: var(--color-brand-hover);
   font: inherit;
   font-size: 13px;
   font-weight: 700;
@@ -479,19 +652,19 @@ function refazerQuestionario() {
 }
 
 .botao-explorar-area:hover {
-  background: #4389cc;
-  color: #fff;
+  background: var(--color-brand);
+  color: var(--color-surface);
   transform: translateY(-1px);
 }
 
 .botao-explorar-area:focus-visible {
-  outline: 3px solid #4389cc55;
+  outline: 3px solid var(--color-focus-ring);
   outline-offset: 3px;
 }
 
 .nota {
   margin: 24px 0 0;
-  color: #526777;
+  color: var(--color-text);
   font-size: 13px;
   line-height: 1.7;
 }
@@ -509,8 +682,8 @@ function refazerQuestionario() {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 13px 18px;
-  border-radius: 10px;
+  padding: var(--button-padding-y) var(--button-padding-x);
+  border-radius: var(--button-radius);
   font-size: 14px;
   font-weight: 700;
   text-decoration: none;
@@ -518,24 +691,70 @@ function refazerQuestionario() {
 }
 
 .botao-principal {
-  background: #4389cc;
-  color: #fff;
+  background: var(--color-brand);
+  color: var(--color-surface);
 }
 
 .botao-principal:hover {
-  background: #315c83;
+  background: var(--color-brand-dark);
 }
 
 .botao-secundario {
-  border: 1px solid #d4e5f3;
-  background: #fff;
-  color: #315c83;
+  border: 1px solid var(--color-border-blue);
+  background: var(--color-surface);
+  color: var(--color-brand-dark);
 }
 
 .botao-secundario:hover {
-  background: #eaf5ff;
+  background: var(--color-sky-50);
 }
 
+.pontuacao {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin: 14px 0 8px;
+  color: var(--color-text);
+  font-size: 12px;
+}
+
+.pontuacao strong {
+  color: var(--color-brand-dark);
+  font-size: 14px;
+}
+
+.barra-fundo {
+  height: 8px;
+  overflow: hidden;
+  border-radius: var(--button-radius);
+  background: var(--color-sky-100);
+}
+
+.barra-preenchida {
+  height: 100%;
+  border-radius: inherit;
+  background: var(--color-brand);
+  transition: width 0.3s ease;
+}
+
+.motivos {
+  margin-top: 14px;
+  color: var(--color-text);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.motivos strong {
+  color: var(--color-brand-dark);
+}
+
+.motivos ul {
+  padding-left: 20px;
+  margin-bottom: 0;
+}
+
+/* Media query no fim para sobrescrever as regras base */
 @media (max-width: 480px) {
   .pagina-resultados {
     padding: 40px 16px 65px;
@@ -559,50 +778,4 @@ function refazerQuestionario() {
     width: 100%;
   }
 }
-
-.pontuacao {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  margin: 14px 0 8px;
-  color: #526777;
-  font-size: 12px;
-}
-
-.pontuacao strong {
-  color: #315c83;
-  font-size: 14px;
-}
-
-.barra-fundo {
-  height: 8px;
-  overflow: hidden;
-  border-radius: 10px;
-  background: #dcecf7;
-}
-
-.barra-preenchida {
-  height: 100%;
-  border-radius: inherit;
-  background: #4389cc;
-  transition: width 0.3s ease;
-}
-
-.motivos {
-  margin-top: 14px;
-  color: #526777;
-  font-size: 13px;
-  line-height: 1.7;
-}
-
-.motivos strong {
-  color: #315c83;
-}
-
-.motivos ul {
-  padding-left: 20px;
-  margin-bottom: 0;
-}
-
 </style>

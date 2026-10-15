@@ -1,6 +1,73 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;500;600;700;800&display=swap');
 
+/* Ajustes rápidos da identidade visual: altere os tokens abaixo para mudar o tema. */
+:root {
+  --color-brand-dark: #315c83;
+  --color-brand: #4389cc;
+  --color-brand-hover: #357bb5;
+  --color-brand-strong: #245f95;
+  --color-brand-soft: #79b9eb;
+  --color-text-primary: #263b50;
+  --color-text: #526777;
+  --color-text-muted: #63798c;
+  --color-text-subtle: #718497;
+  --color-text-faint: #7890a3;
+  --color-text-blue: #526f87;
+  --color-surface: #ffffff;
+  --color-surface-glass: #ffffffd9;
+  --color-surface-soft: #f8fbff;
+  --color-surface-cool: #fafdff;
+  --color-surface-lighter: #f9fbfe;
+  --color-surface-tinted: #f5f9fd;
+  --color-surface-tint: #f3f8fd;
+  --color-surface-gradient: #edf6fe;
+  --color-surface-gray: #edf2f7;
+  --color-canvas: #f5faff;
+  --color-canvas-alt: #f4f8fc;
+  --color-sky-50: #eaf5ff;
+  --color-sky-100: #dcecf7;
+  --color-sky-150: #e2effb;
+  --color-sky-200: #eaf4fd;
+  --color-sky-250: #e8f3fd;
+  --color-sky-300: #c6def3;
+  --color-sky-350: #cfe2f3;
+  --color-sky-400: #a8c8e3;
+  --color-sky-450: #a9c7df;
+  --color-border: #e5edf5;
+  --color-border-soft: #e1edf7;
+  --color-border-cool: #dce7f1;
+  --color-border-blue: #d4e5f3;
+  --color-border-blue-soft: #e0edf8;
+  --color-border-divider: #dfebf5;
+  --color-focus-ring: #4389cc55;
+  --color-brand-wash: #4389cc20;
+  --color-cloud-shadow: #52677715;
+  --color-white: #ffffff;
+  --color-card-background: rgba(248, 251, 255, 0.96);
+  --color-card-border: rgba(255, 255, 255, 0.9);
+  --color-page-background: var(--color-canvas);
+  --color-home-background: var(--color-sky-100);
+  --color-sky-mid: #a9d6f5;
+  --color-sky-bottom: #6fa8dc;
+  --background-sky: radial-gradient(ellipse at 75% 15%, var(--color-surface) 0%, transparent 35%), linear-gradient(180deg, var(--color-sky-100) 0%, var(--color-sky-mid) 55%, var(--color-sky-bottom) 100%);
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --radius-control: 10px;
+  --radius-card: 24px;
+  --shadow-card: 0 12px 35px rgba(49, 92, 131, 0.10);
+  --button-padding-y: 13px;
+  --button-padding-x: 20px;
+  --button-radius: var(--radius-control);
+}
+
+
 * {
   box-sizing: border-box;
 }
@@ -13,8 +80,8 @@ body {
   margin: 0;
   min-width: 320px;
   font-family: 'Nunito Sans', Arial, sans-serif;
-  color: #263b50;
-  background: #f5faff;
+  color: var(--color-text-primary);
+  background: var(--color-page-background);
 }
 
 button,

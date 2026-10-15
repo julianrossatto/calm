@@ -1,8 +1,15 @@
-
 <script setup>
+import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
+
+const inicioAtivo = computed(() => route.path === '/' && !route.hash)
+const sobreAtivo = computed(() => route.path === '/' && route.hash === '#sobre')
+const explorarAtivo = computed(() =>
+  ['/questionario', '/resultados'].includes(route.path),
+)
+const profissoesAtivo = computed(() => route.path.startsWith('/profissoes'))
 </script>
 
 <template>
@@ -11,11 +18,12 @@ const route = useRoute()
       calm<span>.</span>
     </RouterLink>
 
-    <nav class="navegacao">
+    <nav class="navegacao" aria-label="Navegação principal">
       <RouterLink
         to="/"
         class="link"
-        :class="{ ativo: route.path === '/' }"
+        :class="{ ativo: inicioAtivo }"
+        :aria-current="inicioAtivo ? 'page' : undefined"
       >
         Início
       </RouterLink>
@@ -23,12 +31,29 @@ const route = useRoute()
       <RouterLink
         to="/questionario"
         class="link"
-        :class="{ ativo: route.path === '/questionario' }"
+        :class="{ ativo: explorarAtivo }"
+        :aria-current="route.path === '/questionario' ? 'page' : undefined"
       >
         Explorar
       </RouterLink>
 
-      <a href="#sobre" class="link">Sobre</a>
+      <RouterLink
+        to="/profissoes"
+        class="link"
+        :class="{ ativo: profissoesAtivo }"
+        :aria-current="route.path === '/profissoes' ? 'page' : undefined"
+      >
+        Profissões
+      </RouterLink>
+
+      <RouterLink
+        to="/#sobre"
+        class="link"
+        :class="{ ativo: sobreAtivo }"
+        :aria-current="sobreAtivo ? 'location' : undefined"
+      >
+        Sobre
+      </RouterLink>
     </nav>
   </header>
 </template>
@@ -39,7 +64,6 @@ const route = useRoute()
   max-width: 1120px;
   margin: 0 auto;
   padding: 24px 32px;
-
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -47,7 +71,7 @@ const route = useRoute()
 }
 
 .logo {
-  color: #315c83;
+  color: var(--color-brand-dark);
   font-size: 28px;
   font-weight: 800;
   letter-spacing: -1px;
@@ -55,7 +79,7 @@ const route = useRoute()
 }
 
 .logo span {
-  color: #79b9eb;
+  color: var(--color-brand-soft);
 }
 
 .navegacao {
@@ -65,7 +89,7 @@ const route = useRoute()
 }
 
 .link {
-  color: #526777;
+  color: var(--color-text);
   font-size: 14px;
   font-weight: 600;
   text-decoration: none;
@@ -74,16 +98,20 @@ const route = useRoute()
 
 .link:hover,
 .link.ativo {
-  color: #357bb5;
+  color: var(--color-brand-hover);
 }
 
 @media (max-width: 480px) {
   .cabecalho {
-    padding: 20px;
+    flex-direction: column;
+    gap: 16px;
+    padding: 20px 16px;
   }
 
   .navegacao {
-    gap: 14px;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px 16px;
   }
 
   .link {

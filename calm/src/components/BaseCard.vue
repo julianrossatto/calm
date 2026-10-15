@@ -10,11 +10,11 @@
 .cartao {
   width: 100%;
   box-sizing: border-box;
-  padding: 32px;
-  border: 1px solid rgba(255, 255, 255, 0.9);
-  border-radius: 24px;
-  background: rgba(248, 251, 255, 0.96);
-  box-shadow: 0 12px 35px rgba(49, 92, 131, 0.10);
+  padding: var(--space-8);
+  border: 1px solid var(--color-card-border);
+  border-radius: var(--radius-card);
+  background: var(--color-card-background);
+  box-shadow: var(--shadow-card);
 }
 
 @media (max-width: 600px) {

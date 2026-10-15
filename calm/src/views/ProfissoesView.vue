@@ -202,8 +202,8 @@ function limparFiltros() {
 .pagina-profissoes {
   min-height: 100vh;
   padding: 65px 24px 80px;
-  background: #f4f8fc;
-  color: #315c83;
+  background: var(--color-canvas-alt);
+  color: var(--color-brand-dark);
 }
 
 .cabecalho {
@@ -216,8 +216,8 @@ function limparFiltros() {
   display: inline-block;
   padding: 8px 14px;
   border-radius: 30px;
-  background: #e2effb;
-  color: #4389cc;
+  background: var(--color-sky-150);
+  color: var(--color-brand);
   font-size: 11px;
   font-weight: 800;
   letter-spacing: 1.3px;
@@ -233,7 +233,7 @@ function limparFiltros() {
 .cabecalho p {
   max-width: 600px;
   margin: 0 auto;
-  color: #63798c;
+  color: var(--color-text-muted);
   font-size: 16px;
   line-height: 1.8;
 }
@@ -242,9 +242,9 @@ function limparFiltros() {
   max-width: 1100px;
   margin: 0 auto;
   padding: 30px;
-  border: 1px solid #e5edf5;
+  border: 1px solid var(--color-border);
   border-radius: 24px;
-  background: #fff;
+  background: var(--color-surface);
   box-shadow: 0 12px 35px rgba(49, 92, 131, 0.07);
 }
 
@@ -259,10 +259,10 @@ function limparFiltros() {
   align-items: center;
   gap: 12px;
   padding: 0 16px;
-  border: 1px solid #dce7f1;
+  border: 1px solid var(--color-border-cool);
   border-radius: 12px;
-  background: #f9fbfe;
-  color: #4389cc;
+  background: var(--color-surface-lighter);
+  color: var(--color-brand);
 }
 
 .campo-busca > span {
@@ -276,13 +276,13 @@ function limparFiltros() {
   border: none;
   outline: none;
   background: transparent;
-  color: #315c83;
+  color: var(--color-brand-dark);
   font: inherit;
 }
 
 .campo-busca:focus-within {
-  border-color: #4389cc;
-  box-shadow: 0 0 0 3px #4389cc20;
+  border-color: var(--color-brand);
+  box-shadow: 0 0 0 3px var(--color-brand-wash);
 }
 
 .filtros {
@@ -293,24 +293,24 @@ function limparFiltros() {
 
 .filtros button {
   padding: 9px 15px;
-  border: 1px solid #dce7f1;
+  border: 1px solid var(--color-border-cool);
   border-radius: 30px;
-  background: #fff;
-  color: #526777;
+  background: var(--color-surface);
+  color: var(--color-text);
   font-size: 13px;
   cursor: pointer;
   transition: 0.2s;
 }
 
 .filtros button:hover {
-  border-color: #4389cc;
-  color: #357bb5;
+  border-color: var(--color-brand);
+  color: var(--color-brand-hover);
 }
 
 .filtros button.ativo {
-  border-color: #4389cc;
-  background: #4389cc;
-  color: #fff;
+  border-color: var(--color-brand);
+  background: var(--color-brand);
+  color: var(--color-surface);
 }
 
 .resumo {
@@ -328,7 +328,7 @@ function limparFiltros() {
 }
 
 .resumo > span {
-  color: #718497;
+  color: var(--color-text-subtle);
   font-size: 13px;
 }
 
@@ -344,23 +344,23 @@ function limparFiltros() {
   align-items: flex-start;
   min-width: 0;
   padding: 23px;
-  border: 1px solid #e5edf5;
+  border: 1px solid var(--color-border);
   border-radius: 18px;
-  background: #fff;
+  background: var(--color-surface);
   transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
 }
 
 .card-profissao:hover {
   transform: translateY(-3px);
-  border-color: #c6def3;
+  border-color: var(--color-sky-300);
   box-shadow: 0 10px 25px rgba(49, 92, 131, 0.08);
 }
 
 .area {
   padding: 6px 10px;
   border-radius: 20px;
-  background: #eaf4fd;
-  color: #357bb5;
+  background: var(--color-sky-200);
+  color: var(--color-brand-hover);
   font-size: 11px;
   font-weight: 700;
 }
@@ -373,7 +373,7 @@ function limparFiltros() {
 
 .card-profissao > p {
   margin: 0;
-  color: #63798c;
+  color: var(--color-text-muted);
   font-size: 14px;
   line-height: 1.7;
 }
@@ -384,13 +384,13 @@ function limparFiltros() {
   gap: 6px;
   margin-top: auto;
   padding-top: 22px;
-  color: #63798c;
+  color: var(--color-text-muted);
   font-size: 12px;
   line-height: 1.6;
 }
 
 .habilidades strong {
-  color: #315c83;
+  color: var(--color-brand-dark);
 }
 
 .botao-detalhes {
@@ -401,10 +401,10 @@ function limparFiltros() {
   width: 100%;
   margin-top: 20px;
   padding: 11px 14px;
-  border: 1px solid #cfe2f3;
-  border-radius: 11px;
-  background: #f3f8fd;
-  color: #357bb5;
+  border: 1px solid var(--color-sky-350);
+  border-radius: var(--button-radius);
+  background: var(--color-surface-tint);
+  color: var(--color-brand-hover);
   font-size: 13px;
   font-weight: 700;
   text-decoration: none;
@@ -412,13 +412,13 @@ function limparFiltros() {
 }
 
 .botao-detalhes:hover {
-  border-color: #4389cc;
-  background: #e8f3fd;
+  border-color: var(--color-brand);
+  background: var(--color-sky-250);
   transform: translateY(-1px);
 }
 
 .botao-detalhes:focus-visible {
-  outline: 3px solid #4389cc55;
+  outline: 3px solid var(--color-focus-ring);
   outline-offset: 3px;
 }
 
@@ -427,7 +427,7 @@ function limparFiltros() {
   justify-content: center;
   margin-top: 34px;
   padding-top: 24px;
-  border-top: 1px solid #edf2f7;
+  border-top: 1px solid var(--color-surface-gray);
 }
 
 .botao-ver-mais {
@@ -437,10 +437,10 @@ function limparFiltros() {
   gap: 14px;
   min-width: 210px;
   padding: 13px 22px 13px 24px;
-  border: 1px solid #4389cc;
-  border-radius: 14px;
-  background: linear-gradient(135deg, #4389cc 0%, #357bb5 100%);
-  color: #fff;
+  border: 1px solid var(--color-brand);
+  border-radius: var(--button-radius);
+  background: linear-gradient(135deg, var(--color-brand) 0%, var(--color-brand-hover) 100%);
+  color: var(--color-surface);
   font: inherit;
   font-size: 14px;
   font-weight: 700;
@@ -460,17 +460,17 @@ function limparFiltros() {
   width: 27px;
   height: 27px;
   place-items: center;
-  border-radius: 9px;
+  border-radius: var(--button-radius);
   background: rgba(255, 255, 255, 0.18);
-  color: #fff;
+  color: var(--color-surface);
   font-size: 16px;
   line-height: 1;
   transition: background 0.2s ease, transform 0.2s ease;
 }
 
 .botao-ver-mais:hover {
-  border-color: #315c83;
-  background: linear-gradient(135deg, #357bb5 0%, #315c83 100%);
+  border-color: var(--color-brand-dark);
+  background: linear-gradient(135deg, var(--color-brand-hover) 0%, var(--color-brand-dark) 100%);
   box-shadow: 0 9px 22px rgba(49, 92, 131, 0.22);
   transform: translateY(-2px);
 }
@@ -486,7 +486,7 @@ function limparFiltros() {
 }
 
 .botao-ver-mais:focus-visible {
-  outline: 3px solid #4389cc55;
+  outline: 3px solid var(--color-focus-ring);
   outline-offset: 4px;
 }
 
@@ -508,16 +508,16 @@ function limparFiltros() {
 }
 
 .sem-resultados p {
-  color: #63798c;
+  color: var(--color-text-muted);
 }
 
 .sem-resultados button {
   margin-top: 10px;
   padding: 11px 16px;
   border: none;
-  border-radius: 10px;
-  background: #4389cc;
-  color: #fff;
+  border-radius: var(--button-radius);
+  background: var(--color-brand);
+  color: var(--color-surface);
   cursor: pointer;
 }
 

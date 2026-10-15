@@ -123,8 +123,8 @@ const profissoesRelacionadas = computed(() => {
 .pagina-detalhe {
   min-height: 100vh;
   padding: 45px 24px 80px;
-  background: #f4f8fc;
-  color: #315c83;
+  background: var(--color-canvas-alt);
+  color: var(--color-brand-dark);
 }
 
 .conteudo-detalhe {
@@ -137,21 +137,21 @@ const profissoesRelacionadas = computed(() => {
   align-items: center;
   gap: 9px;
   margin-bottom: 28px;
-  color: #4389cc;
+  color: var(--color-brand);
   font-size: 14px;
   font-weight: 700;
   text-decoration: none;
 }
 
 .voltar-catalogo:hover {
-  color: #245f95;
+  color: var(--color-brand-strong);
 }
 
 .cabecalho-detalhe {
   padding: 42px 34px;
-  border: 1px solid #e1edf7;
+  border: 1px solid var(--color-border-soft);
   border-radius: 24px;
-  background: linear-gradient(135deg, #ffffff 0%, #edf6fe 100%);
+  background: linear-gradient(135deg, var(--color-surface) 0%, var(--color-surface-gradient) 100%);
   box-shadow: 0 12px 35px rgba(49, 92, 131, 0.06);
   text-align: center;
 }
@@ -160,15 +160,15 @@ const profissoesRelacionadas = computed(() => {
   display: inline-block;
   padding: 7px 12px;
   border-radius: 20px;
-  background: #e2effb;
-  color: #357bb5;
+  background: var(--color-sky-150);
+  color: var(--color-brand-hover);
   font-size: 12px;
   font-weight: 700;
 }
 
 .sobretitulo {
   margin: 20px 0 10px;
-  color: #4389cc;
+  color: var(--color-brand);
   font-size: 10px;
   font-weight: 800;
   letter-spacing: 1.5px;
@@ -184,7 +184,7 @@ const profissoesRelacionadas = computed(() => {
 .descricao-principal {
   max-width: 700px;
   margin: 0 auto;
-  color: #63798c;
+  color: var(--color-text-muted);
   font-size: 16px;
   line-height: 1.8;
 }
@@ -199,14 +199,14 @@ const profissoesRelacionadas = computed(() => {
 .bloco-detalhe {
   min-width: 0;
   padding: 26px;
-  border: 1px solid #e5edf5;
+  border: 1px solid var(--color-border);
   border-radius: 20px;
-  background: #fff;
+  background: var(--color-surface);
   box-shadow: 0 8px 24px rgba(49, 92, 131, 0.04);
 }
 
 .bloco-destaque {
-  background: #fafdff;
+  background: var(--color-surface-cool);
 }
 
 .icone-bloco {
@@ -216,8 +216,8 @@ const profissoesRelacionadas = computed(() => {
   width: 38px;
   height: 38px;
   border-radius: 12px;
-  background: #eaf4fd;
-  color: #357bb5;
+  background: var(--color-sky-200);
+  color: var(--color-brand-hover);
   font-size: 22px;
 }
 
@@ -229,7 +229,7 @@ const profissoesRelacionadas = computed(() => {
 
 .bloco-detalhe p {
   margin: 0;
-  color: #63798c;
+  color: var(--color-text-muted);
   font-size: 14px;
   line-height: 1.8;
 }
@@ -247,10 +247,10 @@ const profissoesRelacionadas = computed(() => {
 .lista-habilidades li,
 .lista-locais li {
   padding: 7px 10px;
-  border: 1px solid #e0edf8;
-  border-radius: 10px;
-  background: #f5f9fd;
-  color: #526f87;
+  border: 1px solid var(--color-border-blue-soft);
+  border-radius: var(--button-radius);
+  background: var(--color-surface-tinted);
+  color: var(--color-text-blue);
   font-size: 12px;
   line-height: 1.4;
 }
@@ -278,7 +278,7 @@ const profissoesRelacionadas = computed(() => {
 }
 
 .area-relacionada {
-  color: #718497;
+  color: var(--color-text-subtle);
   font-size: 12px;
 }
 
@@ -294,9 +294,9 @@ const profissoesRelacionadas = computed(() => {
   align-items: flex-start;
   min-width: 0;
   padding: 20px;
-  border: 1px solid #e5edf5;
+  border: 1px solid var(--color-border);
   border-radius: 16px;
-  background: #fff;
+  background: var(--color-surface);
 }
 
 .card-relacionada h3 {
@@ -307,14 +307,14 @@ const profissoesRelacionadas = computed(() => {
 
 .card-relacionada p {
   margin: 0 0 18px;
-  color: #63798c;
+  color: var(--color-text-muted);
   font-size: 13px;
   line-height: 1.6;
 }
 
 .card-relacionada a {
   margin-top: auto;
-  color: #357bb5;
+  color: var(--color-brand-hover);
   font-size: 13px;
   font-weight: 700;
   text-decoration: none;
@@ -326,21 +326,21 @@ const profissoesRelacionadas = computed(() => {
 
 .aviso-informativo {
   margin: 26px 4px 0;
-  color: #718497;
+  color: var(--color-text-subtle);
   font-size: 12px;
   line-height: 1.8;
 }
 
 .nao-encontrada {
   padding: 70px 24px;
-  border: 1px solid #e5edf5;
+  border: 1px solid var(--color-border);
   border-radius: 24px;
-  background: #fff;
+  background: var(--color-surface);
   text-align: center;
 }
 
 .icone-nao-encontrada {
-  color: #4389cc;
+  color: var(--color-brand);
   font-size: 42px;
 }
 
@@ -352,7 +352,7 @@ const profissoesRelacionadas = computed(() => {
 .nao-encontrada p {
   max-width: 520px;
   margin: 0 auto;
-  color: #63798c;
+  color: var(--color-text-muted);
   font-size: 14px;
   line-height: 1.8;
 }
@@ -363,16 +363,16 @@ const profissoesRelacionadas = computed(() => {
   justify-content: center;
   margin-top: 22px;
   padding: 12px 18px;
-  border-radius: 11px;
-  background: #4389cc;
-  color: #fff;
+  border-radius: var(--button-radius);
+  background: var(--color-brand);
+  color: var(--color-surface);
   font-size: 14px;
   font-weight: 700;
   text-decoration: none;
 }
 
 .botao-voltar:hover {
-  background: #357bb5;
+  background: var(--color-brand-hover);
 }
 
 @media (max-width: 760px) {

@@ -16,21 +16,21 @@
 <style scoped>
 .rodape {
   padding: 32px 24px;
-  border-top: 1px solid #dfebf5;
-  background: #f8fbff;
-  color: #7890a3;
+  border-top: 1px solid var(--color-border-divider);
+  background: var(--color-surface-soft);
+  color: var(--color-text-faint);
   text-align: center;
 }
 
 .logo {
-  color: #315c83;
+  color: var(--color-brand-dark);
   font-size: 24px;
   font-weight: 800;
   text-decoration: none;
 }
 
 .logo span {
-  color: #79b9eb;
+  color: var(--color-brand-soft);
 }
 
 p {
