@@ -3,7 +3,7 @@
 
 /* Ajustes rápidos da identidade visual: altere os tokens abaixo para mudar o tema. */
 :root {
-  --color-brand-dark: #315c83;
+  --color-brand-dark: #263b50;
   --color-brand: #4389cc;
   --color-brand-hover: #357bb5;
   --color-brand-strong: #245f95;
@@ -12,11 +12,11 @@
   --color-text: #526777;
   --color-text-muted: #63798c;
   --color-text-subtle: #718497;
-  --color-text-faint: #7890a3;
+  --color-text-faint: #ffffffd9;
   --color-text-blue: #526f87;
   --color-surface: #ffffff;
   --color-surface-glass: #ffffffd9;
-  --color-surface-soft: #f8fbff;
+  --color-surface-soft: #183D5D;
   --color-surface-cool: #fafdff;
   --color-surface-lighter: #f9fbfe;
   --color-surface-tinted: #f5f9fd;
@@ -50,7 +50,8 @@
   --color-home-background: var(--color-sky-100);
   --color-sky-mid: #a9d6f5;
   --color-sky-bottom: #6fa8dc;
-  --background-sky: radial-gradient(ellipse at 75% 15%, var(--color-surface) 0%, transparent 35%), linear-gradient(180deg, var(--color-sky-100) 0%, var(--color-sky-mid) 55%, var(--color-sky-bottom) 100%);
+  --color-sunrise: #f7d68e;
+  --background-sky: var(--color-canvas);
 
   --space-1: 4px;
   --space-2: 8px;

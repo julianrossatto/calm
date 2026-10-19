@@ -1,77 +1,105 @@
+<script setup>
+import { onMounted, onUnmounted, ref } from 'vue'
+
+const sunOffset = ref(0)
+const sunHorizontalOffset = ref(0)
+let scrollFrame = 0
+
+function moveSunWithScroll() {
+  if (scrollFrame) return
+
+  scrollFrame = window.requestAnimationFrame(() => {
+    sunOffset.value = Math.min(window.scrollY * 0.2, 135)
+    sunHorizontalOffset.value = window.innerWidth <= 600 ? -230 : 0
+    scrollFrame = 0
+  })
+}
+
+onMounted(() => {
+  moveSunWithScroll()
+  window.addEventListener('scroll', moveSunWithScroll, { passive: true })
+  window.addEventListener('resize', moveSunWithScroll, { passive: true })
+})
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', moveSunWithScroll)
+  window.removeEventListener('resize', moveSunWithScroll)
+  window.cancelAnimationFrame(scrollFrame)
+})
+</script>
 
 <template>
-  <div class="ceu">
-    <div class="nuvem nuvem-esquerda"></div>
-    <div class="nuvem nuvem-direita"></div>
-    <div class="nuvem nuvem-baixo-esquerda"></div>
-    <div class="nuvem nuvem-baixo-direita"></div>
+  <div class="ceu" aria-hidden="true">
+    <svg class="paisagem" viewBox="0 0 1600 1130" preserveAspectRatio="xMidYMid slice" focusable="false">
+      <defs>
+        <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#abd0ee" />
+          <stop offset="54%" stop-color="#c3d9ed" />
+          <stop offset="100%" stop-color="#dceaf7" />
+        </linearGradient>
+        <radialGradient id="sun-halo" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#eef5fd" stop-opacity=".68" />
+          <stop offset="72%" stop-color="#e2edf8" stop-opacity=".24" />
+          <stop offset="100%" stop-color="#e2edf8" stop-opacity="0" />
+        </radialGradient>
+        <radialGradient id="sun-disc" cx="42%" cy="32%" r="72%">
+          <stop offset="0%" stop-color="#f8fbff" stop-opacity=".98" />
+          <stop offset="68%" stop-color="#e9f2fb" stop-opacity=".94" />
+          <stop offset="100%" stop-color="#dbe9f6" stop-opacity=".9" />
+        </radialGradient>
+        <linearGradient id="far-range" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#a8c8e5" />
+          <stop offset="100%" stop-color="#88acd0" />
+        </linearGradient>
+        <linearGradient id="middle-range" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#7da9d2" />
+          <stop offset="100%" stop-color="#5d8bb8" />
+        </linearGradient>
+        <linearGradient id="near-range" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#5b8fc0" />
+          <stop offset="100%" stop-color="#3f74a7" />
+        </linearGradient>
+        <linearGradient id="inner-range" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#376e9c" />
+          <stop offset="100%" stop-color="#285b84" />
+        </linearGradient>
+        <linearGradient id="foreground" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#234e73" />
+          <stop offset="100%" stop-color="#183d5d" />
+        </linearGradient>
+      </defs>
+
+      <rect width="1600" height="1130" fill="url(#sky)" />
+      <g :transform="`translate(0 ${-sunOffset})`">
+        <g :transform="`translate(${sunHorizontalOffset} 0)`">
+          <circle cx="1080" cy="390" r="265" fill="url(#sun-halo)" />
+          <circle cx="1080" cy="390" r="180" fill="url(#sun-disc)" />
+        </g>
+      </g>
+
+      <path d="M0 520 C112 500 198 482 274 466 C347 450 370 421 448 418 C520 415 552 452 621 450 C682 449 694 377 771 365 C817 359 839 384 882 397 C935 414 976 399 1025 405 C1096 413 1122 448 1200 437 C1270 427 1296 441 1364 457 C1456 479 1514 468 1600 483 V1130 H0 Z" fill="url(#far-range)" />
+      <path d="M0 625 C98 611 164 578 252 575 C346 572 385 624 482 626 C568 628 618 574 706 577 C789 580 817 634 902 640 C994 646 1041 589 1133 586 C1228 583 1284 633 1374 628 C1460 623 1510 594 1600 578 V1130 H0 Z" fill="url(#middle-range)" />
+      <path d="M0 729 C94 716 155 683 236 681 C321 679 370 723 454 729 C546 735 603 688 688 690 C779 692 815 751 905 755 C1001 759 1057 707 1140 702 C1234 696 1280 740 1363 741 C1459 742 1519 697 1600 680 V1130 H0 Z" fill="url(#near-range)" />
+      <path d="M0 827 C108 814 180 778 269 779 C366 780 411 831 506 837 C607 843 654 797 750 800 C850 803 896 863 993 865 C1094 867 1153 817 1245 810 C1351 802 1420 844 1503 832 C1540 827 1573 812 1600 801 V1130 H0 Z" fill="url(#inner-range)" />
+      <path d="M0 552 C42 596 46 666 94 714 C142 763 195 783 239 840 C300 917 384 973 468 1032 C536 1080 594 1120 656 1130 C716 1140 748 1099 803 1098 C862 1097 896 1134 952 1130 C1018 1125 1066 1083 1134 1034 C1211 978 1294 925 1359 850 C1402 801 1461 771 1505 719 C1549 666 1555 598 1600 552 V1130 H0 Z" fill="url(#foreground)" />
+    </svg>
   </div>
 </template>
 
 <style scoped>
-
 .ceu {
   position: absolute;
   inset: 0;
-  overflow: hidden;
   z-index: -1;
+  overflow: hidden;
   pointer-events: none;
-
-  background: var(--background-sky);
+  background: #abd0ee;
 }
 
-
-.nuvem {
+.paisagem {
   position: absolute;
-  width: 180px;
-  height: 65px;
-  border-radius: 60px;
-  background: var(--color-surface);
-  opacity: 0.9;
-  filter: drop-shadow(0 4px 8px var(--color-cloud-shadow));
-}
-
-.nuvem::before,
-.nuvem::after {
-  content: '';
-  position: absolute;
-  bottom: 15px;
-  border-radius: 50%;
-  background: var(--color-surface);
-}
-
-.nuvem::before {
-  left: 25px;
-  width: 75px;
-  height: 75px;
-}
-
-.nuvem::after {
-  right: 20px;
-  width: 60px;
-  height: 60px;
-}
-
-.nuvem-esquerda {
-  top: 20%;
-  left: -100px;
-}
-
-.nuvem-direita {
-  top: 35%;
-  right: -110px;
-  transform: scale(1.2);
-}
-
-.nuvem-baixo-esquerda {
-  bottom: -35px;
-  left: -45px;
-  transform: scale(1.5);
-}
-
-.nuvem-baixo-direita {
-  bottom: -40px;
-  right: -50px;
-  transform: scale(1.7);
+  inset: 0;
+  width: 100%;
+  height: 100%;
 }
 </style>

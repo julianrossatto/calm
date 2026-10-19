@@ -14,8 +14,8 @@ const profissoesAtivo = computed(() => route.path.startsWith('/profissoes'))
 
 <template>
   <header class="cabecalho">
-    <RouterLink to="/" class="logo">
-      calm<span>.</span>
+    <RouterLink to="/" class="logo" aria-label="horizonte">
+      horiz<span class="logo-sol" aria-hidden="true"></span>nte
     </RouterLink>
 
     <nav class="navegacao" aria-label="Navegação principal">
@@ -61,25 +61,32 @@ const profissoesAtivo = computed(() => route.path.startsWith('/profissoes'))
 <style scoped>
 .cabecalho {
   width: 100%;
-  max-width: 1120px;
+  max-width: none;
   margin: 0 auto;
-  padding: 24px 32px;
+  padding: 24px max(32px, calc((100% - 1120px) / 2 + 32px));
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 24px;
+  background: #fff;
 }
 
 .logo {
-  color: var(--color-brand-dark);
+  color: #315c83;
   font-size: 28px;
   font-weight: 800;
   letter-spacing: -1px;
   text-decoration: none;
 }
 
-.logo span {
-  color: var(--color-brand-soft);
+.logo .logo-sol {
+  display: inline-block;
+  width: 0.53em;
+  height: 0.53em;
+  margin: 0 0.035em;
+  border-radius: 50%;
+  background: currentColor;
+  vertical-align: 0;
 }
 
 .navegacao {
@@ -89,7 +96,7 @@ const profissoesAtivo = computed(() => route.path.startsWith('/profissoes'))
 }
 
 .link {
-  color: var(--color-text);
+  color: #526777;
   font-size: 14px;
   font-weight: 600;
   text-decoration: none;
@@ -98,7 +105,7 @@ const profissoesAtivo = computed(() => route.path.startsWith('/profissoes'))
 
 .link:hover,
 .link.ativo {
-  color: var(--color-brand-hover);
+  color: #357bb5;
 }
 
 @media (max-width: 480px) {

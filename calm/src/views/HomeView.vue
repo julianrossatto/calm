@@ -40,7 +40,7 @@ import CloudBackground from '../components/CloudBackground.vue'
   <h2>Seu futuro não precisa estar decidido.</h2>
 
   <p>
-    A Calm ajuda você a refletir sobre seus interesses,
+    O Horizonte ajuda você a refletir sobre seus interesses,
     conhecer diferentes profissões e descobrir novas possibilidades,
     sem pressão para escolher agora.
   </p>

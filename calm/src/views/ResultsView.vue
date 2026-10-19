@@ -18,7 +18,7 @@ function explorarArea(area) {
 
 function recuperarRespostas() {
   try {
-    const dados = sessionStorage.getItem('calm-respostas')
+    const dados = sessionStorage.getItem('horizonte-respostas')
 
     if (!dados) return []
 
@@ -123,7 +123,7 @@ function aoSair(el, done) {
 }
 
 function refazerQuestionario() {
-  sessionStorage.removeItem('calm-respostas')
+  sessionStorage.removeItem('horizonte-respostas')
   router.push('/questionario')
 }
 </script>

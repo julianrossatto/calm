@@ -72,7 +72,7 @@ const etapas = [
   },
 ]
 
-const CHAVE_PROGRESSO = 'calm-questionario-progresso'
+const CHAVE_PROGRESSO = 'horizonte-questionario-progresso'
 
 function criarRespostasVazias() {
   return etapas.map(() => [])
@@ -172,7 +172,7 @@ function continuar() {
 
   // Guarda as respostas nesta sessão do navegador.
   sessionStorage.setItem(
-    'calm-respostas',
+    'horizonte-respostas',
     JSON.stringify(respostas.value)
   )
 

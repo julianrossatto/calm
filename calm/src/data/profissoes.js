@@ -1,4 +1,4 @@
-// Catálogo inicial da Calm: 100 profissões organizadas em 10 áreas.
+// Catálogo inicial do Horizonte: 100 profissões organizadas em 10 áreas.
 // As descrições são introdutórias. Requisitos de formação e registro podem variar conforme a profissão e a legislação.
 
 export const areasProfissionais = [

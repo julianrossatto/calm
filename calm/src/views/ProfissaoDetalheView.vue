@@ -5,6 +5,19 @@ import { profissoes } from '../data/profissoes.js'
 
 const route = useRoute()
 
+const iconesPorArea = {
+  'tecnologia-dados': '/icones-areas/tecnologia-dados.png',
+  'arte-design-comunicacao': '/icones-areas/arte-design-comunicacao.png',
+  'saude-bem-estar': '/icones-areas/saude-bem-estar.png',
+  'educacao-desenvolvimento': '/icones-areas/educacao-desenvolvimento-humano.png',
+  'negocios-gestao-financas': '/icones-areas/negocios-gestao-financas.png',
+  'engenharia-industria': '/icones-areas/engenharia-industria.png',
+  'meio-ambiente-agro': '/icones-areas/meio-ambiente-agro.png',
+  'direito-sociedade-servico-publico': '/icones-areas/direito-sociedade-servico-publico.png',
+  'logistica-comercio-servicos': '/icones-areas/logistica-comercio-servicos.png',
+  'gastronomia-turismo-hospitalidade': '/icones-areas/gastronomia-turismo-hospitalidade.png',
+}
+
 // Busca a profissão usando o identificador presente na URL.
 const profissao = computed(() =>
   profissoes.find((item) => item.id === route.params.id),
@@ -42,19 +55,36 @@ const profissoesRelacionadas = computed(() => {
 
         <div class="grade-detalhes">
           <section class="bloco-detalhe bloco-destaque">
-            <span class="icone-bloco" aria-hidden="true">✦</span>
+            <span class="icone-bloco" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-briefcase-business">
+                <path d="M12 12h.01" />
+                <path d="M16 6V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" />
+                <path d="M22 13a18.15 18.15 0 0 1-20 0" />
+                <rect width="20" height="14" x="2" y="6" rx="2" />
+              </svg>
+            </span>
             <h2>O que faz essa profissão?</h2>
             <p>{{ profissao.rotina || 'As atividades podem variar conforme a área de atuação, a empresa e a experiência profissional.' }}</p>
           </section>
 
           <section class="bloco-detalhe">
-            <span class="icone-bloco" aria-hidden="true">⌁</span>
+            <span class="icone-bloco" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-graduation-cap">
+                <path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z" />
+                <path d="M22 10v6" />
+                <path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5" />
+              </svg>
+            </span>
             <h2>Formação e estudos</h2>
             <p>{{ profissao.formacao || 'Os caminhos de formação dependem da função e dos requisitos de cada empregador ou órgão profissional.' }}</p>
           </section>
 
           <section class="bloco-detalhe">
-            <span class="icone-bloco" aria-hidden="true">◎</span>
+            <span class="icone-bloco" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-astroid">
+                <path d="M12.983 21.186a1 1 0 0 1-1.966 0 10 10 0 0 0-8.203-8.203 1 1 0 0 1 0-1.966 10 10 0 0 0 8.203-8.203 1 1 0 0 1 1.966 0 10 10 0 0 0 8.203 8.203 1 1 0 0 1 0 1.966 10 10 0 0 0-8.203 8.203" />
+              </svg>
+            </span>
             <h2>Habilidades relacionadas</h2>
             <ul class="lista-habilidades">
               <li v-for="habilidade in profissao.habilidades || []" :key="habilidade">
@@ -64,7 +94,15 @@ const profissoesRelacionadas = computed(() => {
           </section>
 
           <section class="bloco-detalhe">
-            <span class="icone-bloco" aria-hidden="true">⌂</span>
+            <span class="icone-bloco" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-building-complex">
+                <path d="M10 12h4" />
+                <path d="M10 8h4" />
+                <path d="M14 21v-3a2 2 0 0 0-4 0v3" />
+                <path d="M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2" />
+                <path d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16" />
+              </svg>
+            </span>
             <h2>Onde pode atuar?</h2>
             <ul class="lista-locais">
               <li v-for="local in profissao.locaisAtuacao || []" :key="local">
@@ -89,7 +127,15 @@ const profissoesRelacionadas = computed(() => {
               :key="relacionada.id"
               class="card-relacionada"
             >
-              <h3>{{ relacionada.nome }}</h3>
+              <div class="cabecalho-card-relacionada">
+                <img
+                  class="icone-area-relacionada"
+                  :src="iconesPorArea[relacionada.areaId]"
+                  alt=""
+                  aria-hidden="true"
+                />
+                <h3>{{ relacionada.nome }}</h3>
+              </div>
               <p>{{ relacionada.descricao }}</p>
               <RouterLink
                 :to="{ name: 'profissao-detalhe', params: { id: relacionada.id } }"
@@ -101,7 +147,7 @@ const profissoesRelacionadas = computed(() => {
         </section>
 
         <p class="aviso-informativo">
-          As informações da Calm são introdutórias e servem como ponto de partida
+          As informações do Horizonte são introdutórias e servem como ponto de partida
           para sua pesquisa. Requisitos de formação, registro profissional e rotina
           podem variar conforme a função, a região e a legislação aplicável.
         </p>
@@ -299,8 +345,23 @@ const profissoesRelacionadas = computed(() => {
   background: var(--color-surface);
 }
 
+.cabecalho-card-relacionada {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 9px;
+}
+
+.icone-area-relacionada {
+  flex: 0 0 24px;
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+
 .card-relacionada h3 {
-  margin: 0 0 9px;
+  min-width: 0;
+  margin: 0;
   font-size: 16px;
   line-height: 1.4;
 }
