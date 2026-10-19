@@ -146,7 +146,7 @@ function refazerQuestionario() {
 
       <BaseCard>
         <div class="titulo-cartao">
-          <span class="simbolo">✳</span>
+          <span class="simbolo"><img src="/icones-puzzle/curiosidade.svg" alt="Curiosidade"></span>
           <div>
             <h2>
               {{
@@ -227,7 +227,6 @@ function refazerQuestionario() {
                   @click="explorarArea(area)"
                 >
                   Ver profissões desta área
-                  <span aria-hidden="true">→</span>
                 </button>
               </div>
             </article>
@@ -297,8 +296,7 @@ function refazerQuestionario() {
                   @click="explorarArea(area)"
                 >
                   Ver profissões desta área
-                  <span aria-hidden="true">→</span>
-                </button>
+f                </button>
               </div>
             </article>
           </div>
@@ -499,7 +497,7 @@ function refazerQuestionario() {
   padding: 15px 16px;
   border: 1px solid var(--color-border-blue);
   border-radius: var(--button-radius);
-  background: var(--color-surface-soft);
+  background: var(--color-surface);
   color: var(--color-text);
   font-size: 13px;
   line-height: 1.7;

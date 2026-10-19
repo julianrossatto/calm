@@ -164,7 +164,6 @@ function limparFiltros() {
             :to="{ name: 'profissao-detalhe', params: { id: profissao.id } }"
           >
             Conhecer profissão
-            <span aria-hidden="true">→</span>
           </RouterLink>
         </article>
       </div>
@@ -179,7 +178,6 @@ function limparFiltros() {
           @click="verMaisOpcoes"
         >
           Ver mais opções
-          <span aria-hidden="true">↓</span>
         </button>
       </div>
 
@@ -396,7 +394,7 @@ function limparFiltros() {
 .botao-detalhes {
   display: inline-flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   gap: 12px;
   width: 100%;
   margin-top: 20px;
@@ -439,7 +437,7 @@ function limparFiltros() {
   padding: 13px 22px 13px 24px;
   border: 1px solid var(--color-brand);
   border-radius: var(--button-radius);
-  background: linear-gradient(135deg, var(--color-brand) 0%, var(--color-brand-hover) 100%);
+  background: var(--color-brand);
   color: var(--color-surface);
   font: inherit;
   font-size: 14px;
@@ -470,7 +468,7 @@ function limparFiltros() {
 
 .botao-ver-mais:hover {
   border-color: var(--color-brand-dark);
-  background: linear-gradient(135deg, var(--color-brand-hover) 0%, var(--color-brand-dark) 100%);
+  background: var(--color-brand-dark);
   box-shadow: 0 9px 22px rgba(49, 92, 131, 0.22);
   transform: translateY(-2px);
 }

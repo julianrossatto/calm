@@ -23,11 +23,15 @@ import CloudBackground from '../components/CloudBackground.vue'
 <div class="acoes-inicio">
   <RouterLink to="/questionario" class="botao">
     Explorar possibilidades
-    <span aria-hidden="true">→</span>
+    <span aria-hidden="true">➤</span>
   </RouterLink>
 
   <RouterLink to="/profissoes" class="botao-secundario">
     Conhecer profissões
+  </RouterLink>
+
+  <RouterLink to="/puzzle" class="botao-secundario">
+    Descobrir dicas
   </RouterLink>
 </div>
 
@@ -46,7 +50,7 @@ import CloudBackground from '../components/CloudBackground.vue'
   </p>
 
   <RouterLink to="/questionario" class="link-explorar">
-    Comece a explorar <span aria-hidden="true">→</span>
+    Comece a explorar <span aria-hidden="true">➤</span>
   </RouterLink>
 </section>
 </main>
@@ -93,7 +97,8 @@ import CloudBackground from '../components/CloudBackground.vue'
 }
 
 .botao-secundario:hover {
-  background: var(--color-surface);
+  background: var(--color-brand);
+  color: var(--color-surface);
   transform: translateY(-2px);
 }
 

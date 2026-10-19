@@ -183,7 +183,7 @@ function continuar() {
 
 <template>
   <main class="pagina-questionario">
-    <CloudBackground />
+    <CloudBackground class="fundo-questionario" />
 
     <div class="conteudo">
       <header class="cabecalho-pagina">
@@ -261,7 +261,7 @@ function continuar() {
             class="botao-secundario"
             @click="voltar"
           >
-            ← {{ etapaAtual === 0 ? 'Início' : 'Voltar' }}
+            {{ etapaAtual === 0 ? 'Início' : 'Voltar' }}
           </button>
 
           <button
@@ -270,7 +270,7 @@ function continuar() {
             :disabled="!podeAvancar"
             @click="continuar"
           >
-            {{ ultimaEtapa ? 'Ver possibilidades' : 'Continuar →' }}
+            {{ ultimaEtapa ? 'Ver possibilidades' : 'Continuar' }}
           </button>
         </div>
       </BaseCard>
@@ -503,6 +503,12 @@ function continuar() {
   font-size: 13px;
   line-height: 1.7;
   text-align: center;
+}
+
+@media (max-width: 760px) {
+  .pagina-questionario :deep(.fundo-questionario .cena-background) {
+    transform: scale(0.8);
+  }
 }
 
 @media (max-width: 480px) {

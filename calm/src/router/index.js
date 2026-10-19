@@ -5,6 +5,8 @@ import QuestionnaireView from '../views/QuestionnaireView.vue'
 import ResultsView from '../views/ResultsView.vue'
 import ProfissoesView from '../views/ProfissoesView.vue'
 import ProfissaoDetalheView from '../views/ProfissaoDetalheView.vue'
+import PuzzleView from '../views/PuzzleView.vue'
+import SobreView from '../views/SobreView.vue'
 
 const routes = [
   {
@@ -31,6 +33,16 @@ const routes = [
     path: '/profissoes/:id',
     name: 'profissao-detalhe',
     component: ProfissaoDetalheView,
+  },
+  {
+    path: '/puzzle',
+    name: 'puzzle',
+    component: PuzzleView,
+  },
+  {
+    path: '/sobre',
+    name: 'sobre',
+    component: SobreView,
   },
 ]
 

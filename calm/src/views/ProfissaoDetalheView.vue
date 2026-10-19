@@ -6,16 +6,16 @@ import { profissoes } from '../data/profissoes.js'
 const route = useRoute()
 
 const iconesPorArea = {
-  'tecnologia-dados': '/icones-areas/tecnologia-dados.png',
-  'arte-design-comunicacao': '/icones-areas/arte-design-comunicacao.png',
-  'saude-bem-estar': '/icones-areas/saude-bem-estar.png',
-  'educacao-desenvolvimento': '/icones-areas/educacao-desenvolvimento-humano.png',
-  'negocios-gestao-financas': '/icones-areas/negocios-gestao-financas.png',
-  'engenharia-industria': '/icones-areas/engenharia-industria.png',
-  'meio-ambiente-agro': '/icones-areas/meio-ambiente-agro.png',
-  'direito-sociedade-servico-publico': '/icones-areas/direito-sociedade-servico-publico.png',
-  'logistica-comercio-servicos': '/icones-areas/logistica-comercio-servicos.png',
-  'gastronomia-turismo-hospitalidade': '/icones-areas/gastronomia-turismo-hospitalidade.png',
+  'tecnologia-dados': '/icones-areas/tecnologia-dados.svg',
+  'arte-design-comunicacao': '/icones-areas/arte-design-comunicacao.svg',
+  'saude-bem-estar': '/icones-areas/saude-bem-estar.svg',
+  'educacao-desenvolvimento': '/icones-areas/educacao-desenvolvimento-humano.svg',
+  'negocios-gestao-financas': '/icones-areas/negocios-gestao-financas.svg',
+  'engenharia-industria': '/icones-areas/engenharia-industria.svg',
+  'meio-ambiente-agro': '/icones-areas/meio-ambiente-agro.svg',
+  'direito-sociedade-servico-publico': '/icones-areas/direito-servico-publico.svg',
+  'logistica-comercio-servicos': '/icones-areas/logistica-comercio-servicos.svg',
+  'gastronomia-turismo-hospitalidade': '/icones-areas/gastronomia-turismo.svg',
 }
 
 // Busca a profissão usando o identificador presente na URL.
@@ -128,19 +128,21 @@ const profissoesRelacionadas = computed(() => {
               class="card-relacionada"
             >
               <div class="cabecalho-card-relacionada">
+              <span class="icone-bloco">
                 <img
                   class="icone-area-relacionada"
                   :src="iconesPorArea[relacionada.areaId]"
                   alt=""
                   aria-hidden="true"
                 />
+              </span>
                 <h3>{{ relacionada.nome }}</h3>
               </div>
               <p>{{ relacionada.descricao }}</p>
               <RouterLink
                 :to="{ name: 'profissao-detalhe', params: { id: relacionada.id } }"
               >
-                Ver detalhes <span aria-hidden="true">→</span>
+                Ver detalhes
               </RouterLink>
             </article>
           </div>
